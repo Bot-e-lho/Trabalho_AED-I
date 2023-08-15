@@ -5,6 +5,9 @@
 Matrix* matrix_create(void) {
   
 }
+//Pesquisei como percorrer uma matriz encadeada circular
+//utilizei a mesma logica para o print
+//não sei se é do jeito que imaginavas
 void matrix_destroy(Matrix* m) { // tem que testar, mas imagino que ela n deva deixar leak
   if ( m == NULL ) {
       return;
@@ -39,14 +42,26 @@ void matrix_print(Matrix* m) {
           while ( temp != aux || column <= m->column ) {
                   if ( temp != aux && temp->column == column ) {
                       printf("%.2f", temp->info);
-                  
+                      temp = temp->right;
+                  } else {
+                      printf("%.2f", 0.00);
+                      column++;
+                  }  
           }
-          Matrix* r_next = aux->below;
-          aux = r_next;
+          printf("\n");
+          aux = aux->below;
   }
 }
 
 Matrix* matrix_add(Matrix* m, Matrix* n) {
+  if ( m == NULL || n == NULL || m->line != n->line || m->column != n->column ) {
+      return NULL;
+  } 
+  Matrix* res = matrix_create();
+  Matrix* r_head_m = m;
+  Matrix* r_head_n = n;
+  Matrix* aux_m = r_head_m->below;
+  Matrix* aux_n = r_head_n->below;
   
 }
 
