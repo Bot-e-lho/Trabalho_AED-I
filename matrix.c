@@ -105,7 +105,8 @@ Matrix* matrix_add(Matrix* m, Matrix* n) {
 	struct matrix* below;
 	int line;
 	int column;
-	float info;*/
+	float info;
+ */
 
   Matrix* res = matrix_create();
   Matrix* r_head_m = m;
@@ -148,12 +149,23 @@ Matrix* matrix_multiply(Matrix* m, Matrix* n) {//m - linha e n - coluna (aux)
     while ( aux_m != r_head_m ) {
             Matrix* aux_n = r_head_n->right;
             while ( aux_n != r_head_n ) {
-                    float aux_res = 0.00;
+                    float soma = 0.00;
                     Matrix* temp_n = aux_n->below;
                     Matrix* temp_m = aux_m->right;
                     while ( temp_m != aux_m && temp_n != aux_n ) {
-                      
+                      	    if ( temp_m->column != temp_n->line ) {
+				 printf("\nValores de Colunas(m) e Linhas(n) é incopativel...\n");
+				 return NULL;
+			    } else {
+				soma = temp_m->info * temp_n->info;
+				temp_m = temp_m->right;
+				temp_n = temp_n->below;
+			    } 
                     } 
+		    //void matrix_setelem( Matrix* m, int x, int y, float elem );
+		    if ( sum != 0 ) {
+			matrix_setelem( res, aux_m->line, aux_n->column, sum );
+		    }   
                     aux_n = aux_n->right;
             } 
             aux_m = aux_m->below;
@@ -165,8 +177,27 @@ Matrix* matrix_transpose(Matrix* m) {
 
 }
 
-float matrix_getelem(Matrix* m, int x, int y) {
-
+float matrix_getelem(Matrix* m, int x, int y) {// retorna o valor da coordenada [x][y]?
+  if ( m == NULL || x < 0 || y < 0 ) {
+	return 0.00;
+  }
+  Matrix* r_head = m;
+  Matrix* aux = r_head->below;
+  	while ( aux != r_head || aux->line != x ) {
+	  	aux = aux->below;
+  } 
+ 	if ( aux == r_head ) {//Os dois if's são para linhas ou colunas inexistentes -- talvez dê para n colocar nada?
+	     return 0.00;
+	} 
+	Matrix* temp = aux->right;
+	while ( temp != aux || temp->column != y ) {
+		temp = temp->right;
+	}
+	if ( temp == aux ) {
+	     return 0.00;
+	}
+	
+  return temp->info;
 }
 
 void matrix_setelem(Matrix* m, int x, int y, float elem) {
