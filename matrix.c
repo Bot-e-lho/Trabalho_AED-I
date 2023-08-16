@@ -84,14 +84,12 @@ void matrix_print(Matrix* m) {
   Matrix* aux = r_head->below;
   while ( aux != r_head ) {
           Matrix* temp = aux->right;
-          int column = 0;
-          while ( temp != aux || column <= m->column ) {
-                  if ( temp != aux && temp->column == column ) {
+          while ( temp != aux ) {
+                  if ( temp != aux ) {
                       printf("%.2f", temp->info);
                       temp = temp->right;
                   } else {
                       printf("%.2f", 0.00);
-                      column++;
                   }  
           }
           printf("\n");
@@ -103,16 +101,64 @@ Matrix* matrix_add(Matrix* m, Matrix* n) {
   if ( m == NULL || n == NULL || m->line != n->line || m->column != n->column ) {
       return NULL;
   } 
+  /*struct matrix* right;
+	struct matrix* below;
+	int line;
+	int column;
+	float info;*/
+
   Matrix* res = matrix_create();
   Matrix* r_head_m = m;
   Matrix* r_head_n = n;
   Matrix* aux_m = r_head_m->below;
   Matrix* aux_n = r_head_n->below;
-  
+    while ( aux_m != r_head_m && aux_n != r_head_n ) {
+          Matrix* box_m = aux_m->right;
+          Matrix* box_n = aux_n->right;
+          Matrix* aux_temp = NULL;
+          while ( box_m != aux_m || box_n != aux_n ) {
+            Matrix* temp = ( Matrix* )malloc( sizeof( Matrix ) );
+            temp->line = aux_m->line;
+            temp->column = aux_n->column;
+            temp->info = aux_m->info + aux_n->info;
+            temp->right = temp;
+            temp->below = temp;
+          }
+          if ( aux_temp == NULL ) {
+              res->right = temp;
+          } else {
+              aux_temp->right = temp;
+          } 
+          aux_temp = temp;
+          aux_m = aux_m->right;
+          aux_n = aux_n->right;
+    } 
+  return res;
 }
 
-Matrix* matrix_multiply(Matrix* m, Matrix* n) {
-
+Matrix* matrix_multiply(Matrix* m, Matrix* n) {//m - linha e n - coluna (aux)
+  if ( m == NULL || n == NULL || m->column != n->line ) {
+      return NULL;
+  } 
+  Matrix* res = matrix_create();
+  Matrix* r_head_m = m;
+  Matrix* r_head_n = n;
+  Matrix* aux_m = r_head_m->below;
+  
+    while ( aux_m != r_head_m ) {
+            Matrix* aux_n = r_head_n->right;
+            while ( aux_n != r_head_n ) {
+                    float aux_res = 0.00;
+                    Matrix* temp_n = aux_n->below;
+                    Matrix* temp_m = aux_m->right;
+                    while ( temp_m != aux_m && temp_n != aux_n ) {
+                      
+                    } 
+                    aux_n = aux_n->right;
+            } 
+            aux_m = aux_m->below;
+    } 
+  return res;
 }
 
 Matrix* matrix_transpose(Matrix* m) {
