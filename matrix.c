@@ -38,13 +38,27 @@ void matrix_help( Matrix* m, int a ) {
   Matrix* new_right = ( Matrix* ) malloc ( sizeof( Matrix ) );
   Matrix* new_below = ( Matrix* ) malloc ( sizeof( Matrix ) );
 
-  new_right->line = -1;
+  new_right->line = -1; // Acho que ta invertido o right com o below
+  new_right->column = -1;
   m->below = new_right;
   new_right->below = m;
 
+  new_below->line = -1;
   new_below->column = -1;
   m->line = new_below;
   new_below = m;
+/*
+  new_right->line = -1;
+  new_right->column = -1;
+  new_right->right = m->right;
+  m->right = new_right;
+  
+  new_below->line = -1;
+  new_below->column = -1;
+  new_below->below = m->below;
+  m->below = new_below;
+  
+*/
 
   free( new_right );
   free( new_below );
@@ -174,7 +188,20 @@ Matrix* matrix_multiply(Matrix* m, Matrix* n) {//m - linha e n - coluna (aux)
 }
 
 Matrix* matrix_transpose(Matrix* m) {
-
+  if ( m == NULL ) {
+       return NULL;
+  } 
+  Matrix* res = matrix_create();
+  Matrix* r_head = m;
+  Matrix* aux = r_head->below;
+  while ( aux != r_head ) {
+	  Matrix* temp = aux->right;
+	  while ( temp != aux ) {
+		  //void matrix_setelem( Matrix* m, int x(coluna), int y(linha), float elem ); <---- para transposição
+		  matrix_setelem( res, aux->column, aux->line, aux->info );
+		  temp = temp->right;
+	  } 
+  } 
 }
 
 float matrix_getelem(Matrix* m, int x, int y) {// retorna o valor da coordenada [x][y]?
@@ -201,11 +228,34 @@ float matrix_getelem(Matrix* m, int x, int y) {// retorna o valor da coordenada 
 }
 
 void matrix_setelem(Matrix* m, int x, int y, float elem) {
-  Matrix* new = ( Matrix* ) malloc ( sizeof( Matrix ) );
+  if ( m == NULL || x < 0 || y < 0 ) {//Dei uma arrumada aqui a tua logica tava certa mas tu não tinha feito o percurso para chegar na posição que tu queria chegar
+	return;
+  }
+  Matrix* r_head = m;
+  Matrix* aux = r_head->below;
+  while ( aux != r_head && aux->line != x ) {
+	  aux = aux->below;
+  } 
+  if ( aux == r_head ) {
+       return;
+  } 
+  Matrix* temp_1 = aux;
+  Matrix* temp_2 = aux->right;
+  while ( temp_2 != aux && temp_2->column != y ) {
+	  temp_1 = temp_2;
+	  temp_2 = temp_2->right;
+  } 
+  if ( temp_2 != aux && aux->column == y ) {
+       temp_2 = elem;
+  } else { 
+	Matrix* new = ( Matrix* ) malloc ( sizeof( Matrix ) );
+  	new->line = x;
+  	new->column = y;
+  	new->info = elem;
+	new->right = temp_2;
+	temp_1->right = new;
+  } 
   
-  new->line = x;
-  new->column = y;
-  new->info = elem;
 
   //Criando uma caixinha para adicionar o valor, porém também essa área também pode servir apenas
   //para trocar o valor de um nodo já existente.
