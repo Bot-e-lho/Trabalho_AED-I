@@ -13,6 +13,8 @@ typedef struct matrix {
 
 
 Matrix* matrix_create(void);
+void matrix_heads_line( Matrix* m, int a );
+void matrix_heads_column( Matrix* m, int a );
 void matrix_destroy(Matrix* m);
 void matrix_print(Matrix* m);
 Matrix* matrix_add(Matrix* m, Matrix* n);
