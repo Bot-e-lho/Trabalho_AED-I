@@ -94,7 +94,7 @@ void matrix_print(Matrix* m) {
           Matrix* temp = aux->right;
           while ( temp != aux ) {
                   if ( temp != aux ) {
-                      printf("%.2f", temp->info);
+                      printf("%.2f\t", temp->info);
                       temp = temp->right;
                   } else {
                       printf("%.2f", 0.00);
@@ -196,7 +196,8 @@ Matrix* matrix_transpose( Matrix* m ) {
 		  matrix_setelem( res, aux->column, aux->line, aux->info );
 		  temp = temp->right;
 	  } 
-  } 
+  }
+	return res;
 }
 
 float matrix_getelem(Matrix* m, int x, int y) {// retorna o valor da coordenada [x][y]?
@@ -240,16 +241,16 @@ void matrix_setelem(Matrix* m, int x, int y, float elem) {
 	  temp_1 = temp_2;
 	  temp_2 = temp_2->right;
   } 
-  if ( temp_2 != aux && aux->column == y ) {
-       temp_2->info = elem;
-  } else { 
-	Matrix* new = ( Matrix* ) malloc ( sizeof( Matrix ) );
-  	new->line = x;
-  	new->column = y;
-  	new->info = elem;
-	new->right = temp_2;
-	temp_1->right = new;
-  }
+  if (temp_2 != aux && aux->column == y) {
+    temp_2->info = elem;
+} else {
+    Matrix* new = (Matrix*)malloc(sizeof(Matrix));
+    new->line = x;
+    new->column = y;
+    new->info = elem;
+    new->right = temp_2;
+    temp_1->right = new;
+}
   //Criando uma caixinha para adicionar o valor, porém também essa área também pode servir apenas
   //para trocar o valor de um nodo já existente.
 }
