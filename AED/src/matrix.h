@@ -25,30 +25,26 @@ void matrix_setelem( Matrix* m, int x, int y, float elem );
 
 Matrix* matrix_create( void ) {
     Matrix* matrix = (Matrix*)malloc(sizeof(Matrix));
-
-    // Cria a cabeça inicial
     matrix->line = -1;
     matrix->column = -1;
     matrix->right = matrix;
     matrix->below = matrix;
 
-    // Cria o restante das cabeças
     int m = 0, n = 0;
     printf( "\nInforme o tamanho da matrix (linha x coluna):\n" );
     scanf( "%d %d", &m, &n );
-    if( m <= 0 || n <= 0 ) {//Adicionado
+    if( m <= 0 || n <= 0 ) {
         printf( "Quantidade de colunas e linhas incompativel.\n" );
         exit( 1 );
     }
     matrix_heads( matrix, m, n );
 
-    // Adiciona os valores na matrix
     printf( "\nInforme a coordenada(x,y) e o seu valor:\n" );
     while( 1 ) {
         int i = 1, j = 1;
         float valor = 0.0;
         scanf("%d %d %f", &i, &j, &valor);
-        if( i == -1 || j == -1 || valor == -1 || valor == 0 ) {// acaba ao inserir as coordenadas/valor -1 ou valor 0
+        if( i == -1 || j == -1 || valor == -1 || valor == 0 ) {
             break;
         }
         if( i >= 0 && i < m && j >= 0 && j < n ) {
@@ -61,7 +57,6 @@ Matrix* matrix_create( void ) {
 }
 
 void matrix_heads( Matrix* m, int l, int c ) {
-    // Preenche todas as cabeças das linhas
     for( int i = 0; i < l; i++ ) {
         Matrix* new_node = ( Matrix* ) malloc ( sizeof( Matrix ) );
         Matrix* aux = m->below;
@@ -74,7 +69,7 @@ void matrix_heads( Matrix* m, int l, int c ) {
         new_node->below = m;
         new_node->right = new_node;
     }
-    // Preenche todas as cabeças das colunas
+    
     for( int i = 0; i < c; i++ ) {
         Matrix* new_node = ( Matrix* ) malloc ( sizeof( Matrix ) );
         Matrix* aux = m->right;
@@ -89,14 +84,13 @@ void matrix_heads( Matrix* m, int l, int c ) {
     }
 }
 
-void matrix_destroy( Matrix* m ) {//possui leak
+void matrix_destroy( Matrix* m ) {
     if ( m == NULL ) {
         return;
     }
     
     Matrix* r_head = m;
     Matrix* aux = r_head->below;
-    
     while( aux != r_head ) {
         Matrix* temp = aux->right;
         while( temp != aux ) {
@@ -107,6 +101,13 @@ void matrix_destroy( Matrix* m ) {//possui leak
         Matrix* r_next = aux->below;
         free( aux );
         aux = r_next;
+    }
+
+    aux = r_head->right;
+    while( aux != r_head ) {
+       Matrix* r_next = aux->right;
+       free( aux );
+       aux = r_next;
     }
     free( m );
 }
@@ -124,7 +125,6 @@ void matrix_print( Matrix* m ) {
 
     Matrix* r_head = m;
     Matrix* aux_row = r_head->below;
-
     while( aux_row != r_head ) {
         Matrix* aux_col = aux_row->right;
         
@@ -136,7 +136,6 @@ void matrix_print( Matrix* m ) {
                 printf( "%.2f\t", 0.00 );
             }
         }
-
         printf( "\n" );
         aux_row = aux_row->below;
     }
@@ -186,12 +185,11 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
     }
 
     Matrix* matrix = matrix_create_with_values(line, column, res);
-
     for( int i = 0; i < line; i++ ) {
         free( res[i] );
     }
-    free( res );
 
+    free( res );
     return matrix;
 }
 
@@ -212,13 +210,12 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
     int m_column = aux->column + 1;
 
     aux = n->right;
-
     while( aux->right != n ) {
         aux = aux->right;
     }
     int n_column = aux->column + 1;
 
-    float** res = (float**)malloc(line * sizeof(float*));
+    float** res = ( float** ) malloc ( line * sizeof( float* ) );
     for( int i = 0; i < line; i++ ) {
         res[i] = ( float* )malloc( n_column * sizeof( float ) );
         for( int j = 0; j < n_column; j++ ) {
@@ -256,21 +253,20 @@ Matrix* matrix_transpose( Matrix* m ) {
     }
     int column = aux->column + 1;
 
-    float** res = (float**)malloc(line * sizeof(float*));
+    float** res = ( float** ) malloc ( line * sizeof( float* ) );
     for( int i = 0; i < line; i++ ) {
-        res[i] = ( float* )malloc( column* sizeof( float ) );
+        res[i] = ( float* ) malloc ( column* sizeof( float ) );
         for( int j = 0; j < column; j++ ) {
             res[i][j] = matrix_getelem( m, j, i );
         }
     }
 
     Matrix* matrix = matrix_create_with_values(line, column, res);
-
     for( int i = 0; i < line; i++ ) {
         free( res[i] );
     }
-    free( res );
 
+    free( res );
     return matrix;
 }
 
@@ -298,7 +294,7 @@ float matrix_getelem( Matrix* m, int x, int y ) {
 }
 
 void matrix_setelem( Matrix* m, int x, int y, float elem ) {
-    if( m == NULL || x < 0 || y < 0 ) {//Dei uma arrumada aqui a tua logica tava certa mas tu não tinha feito o percurso para chegar na posição que tu queria chegar
+    if( m == NULL || x < 0 || y < 0 ) {
 	    return;
     }
     Matrix* r_head = m;
@@ -337,7 +333,6 @@ void matrix_setelem( Matrix* m, int x, int y, float elem ) {
         }
         new_node->below = aux_2;
         aux_1->below = new_node;
-
     }
 }
 #endif /*MATRIX_H*/
