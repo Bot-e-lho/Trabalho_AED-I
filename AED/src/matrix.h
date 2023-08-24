@@ -43,11 +43,12 @@ Matrix* matrix_create( void ) {
     while( 1 ) {
         int i = 1, j = 1;
         float valor = 0.0;
-        scanf("%d %d %f", &i, &j, &valor);
-        if( i == -1 || j == -1 || valor == -1 || valor == 0 ) {
+        scanf( "%d %d %f", &i, &j, &valor );
+        char esc = getchar();
+        if( esc == '0' || esc == '.' ) {
             break;
         }
-        if( i >= 0 && i < m && j >= 0 && j < n ) {
+        if( i >= 1 && i <= m && j >= 1 && j <= n ) {
             matrix_setelem( matrix, i, j, valor );
         } else {
             printf( "Posicao invalida\n" );
@@ -57,7 +58,7 @@ Matrix* matrix_create( void ) {
 }
 
 void matrix_heads( Matrix* m, int l, int c ) {
-    for( int i = 0; i < l; i++ ) {
+    for( int i = 1; i <= l; i++ ) {
         Matrix* new_node = ( Matrix* ) malloc ( sizeof( Matrix ) );
         Matrix* aux = m->below;
         while( aux->below != m ) {
@@ -70,7 +71,7 @@ void matrix_heads( Matrix* m, int l, int c ) {
         new_node->right = new_node;
     }
     
-    for( int i = 0; i < c; i++ ) {
+    for( int i = 1; i <= c; i++ ) {
         Matrix* new_node = ( Matrix* ) malloc ( sizeof( Matrix ) );
         Matrix* aux = m->right;
         while( aux->right != m ) {
@@ -128,7 +129,7 @@ void matrix_print( Matrix* m ) {
     while( aux_row != r_head ) {
         Matrix* aux_col = aux_row->right;
         
-        for( int i = 0; i < test->column + 1; i++ ) {
+        for( int i = 1; i <= test->column; i++ ) {
             if( aux_col != NULL && aux_col->column == i ) {
                 printf( "%.2f\t", aux_col->info );
                 aux_col = aux_col->right;
@@ -150,8 +151,8 @@ Matrix* matrix_create_with_values( int m, int n, float** values ) {
 
     matrix_heads( matrix, m, n );
 
-    for( int i = 0; i < m; i++ ) {
-        for( int j = 0; j < n; j++ ) {
+    for( int i = 1; i <= m; i++ ) {
+        for( int j = 1; j <= n; j++ ) {
             float valor = values[i][j];
             matrix_setelem( matrix, i, j, valor );
         }
@@ -180,7 +181,7 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
     for( int i = 0; i < line; i++ ) {
         res[i] = (float*)malloc(column * sizeof(float));
         for( int j = 0; j < column; j++ ) {
-            res[i][j] = matrix_getelem( m, i, j ) + matrix_getelem( n, i, j );
+            res[i][j] = matrix_getelem( m, i + 1, j + 1 ) + matrix_getelem( n, i + 1, j + 1 );
         }
     }
 
@@ -221,7 +222,7 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
         for( int j = 0; j < n_column; j++ ) {
             float value = 0.0;
             for (int k = 0; k < m_column; k++) {
-                value += matrix_getelem( m, i, k ) * matrix_getelem( n, k, j );
+                value += matrix_getelem( m, i + 1, k + 1 ) * matrix_getelem( n, k + 1, j + 1 );
             }
             res[i][j] = value;
         }
@@ -257,7 +258,7 @@ Matrix* matrix_transpose( Matrix* m ) {
     for( int i = 0; i < line; i++ ) {
         res[i] = ( float* ) malloc ( column* sizeof( float ) );
         for( int j = 0; j < column; j++ ) {
-            res[i][j] = matrix_getelem( m, j, i );
+            res[i][j] = matrix_getelem( m, j + 1, i + 1 );
         }
     }
 
