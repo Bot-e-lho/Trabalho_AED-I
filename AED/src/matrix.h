@@ -13,6 +13,7 @@ struct matrix {
 typedef struct matrix Matrix;
 
 Matrix* matrix_create( void );
+Matrix* matrix_create_random( unsigned int m );
 void matrix_heads( Matrix* m, int l, int c );
 void matrix_destroy( Matrix* m );
 void matrix_print( Matrix* m );
@@ -24,7 +25,7 @@ float matrix_getelem( Matrix* m, int x, int y );
 void matrix_setelem( Matrix* m, int x, int y, float elem );
 
 Matrix* matrix_create( void ) {
-    Matrix* matrix = (Matrix*)malloc(sizeof(Matrix));
+    Matrix* matrix = ( Matrix* ) malloc ( sizeof( Matrix ) );
     matrix->line = -1;
     matrix->column = -1;
     matrix->right = matrix;
@@ -56,6 +57,26 @@ Matrix* matrix_create( void ) {
     }
     return matrix;
 }
+
+// Matrix* matrix_create_random( unsigned int m ) {
+//     Matrix* matrix = ( Matrix* ) malloc ( sizeof( Matrix ) );
+//     matrix->line = -1;
+//     matrix->column = -1;
+//     matrix->right = matrix;
+//     matrix->below = matrix;
+
+//     matrix_heads( matrix, m, m );
+
+//     for( int i = 1; i <= m; i++ ) {
+//             for( int j = 1; j <= m; i++ ) {
+//             float value = rand() % 50000;
+//             if( value != 0 ) {
+//                 matrix_setelem( matrix, i, j, value );
+//             }
+//         }
+//     }
+//     return matrix;
+// }
 
 void matrix_heads( Matrix* m, int l, int c ) {
     for( int i = 1; i <= l; i++ ) {
