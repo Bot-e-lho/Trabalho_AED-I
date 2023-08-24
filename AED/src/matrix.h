@@ -151,10 +151,10 @@ Matrix* matrix_create_with_values( int m, int n, float** values ) {
 
     matrix_heads( matrix, m, n );
 
-    for( int i = 1; i <= m; i++ ) {
-        for( int j = 1; j <= n; j++ ) {
+    for( int i = 0; i < m; i++ ) {
+        for( int j = 0; j < n; j++ ) {
             float valor = values[i][j];
-            matrix_setelem( matrix, i, j, valor );
+            matrix_setelem( matrix, i + 1, j + 1, valor );
         }
     }
 
@@ -170,12 +170,12 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
     while( aux->below != m ) {
         aux = aux->below;
     }
-    int line = aux->line + 1;
+    int line = aux->line;
     aux = m->right;
     while( aux->right != m ) {
         aux = aux->right;
     }
-    int column = aux->column + 1;
+    int column = aux->column;
 
     float** res = (float**)malloc(line* sizeof(float*));
     for( int i = 0; i < line; i++ ) {
@@ -203,18 +203,18 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
     while( aux->below != m ) {
         aux = aux->below;
     }
-    int line = aux->line + 1;
+    int line = aux->line;
     aux = m->right;
     while( aux->right != m ) {
         aux = aux->right;
     }
-    int m_column = aux->column + 1;
+    int m_column = aux->column;
 
     aux = n->right;
     while( aux->right != n ) {
         aux = aux->right;
     }
-    int n_column = aux->column + 1;
+    int n_column = aux->column;
 
     float** res = ( float** ) malloc ( line * sizeof( float* ) );
     for( int i = 0; i < line; i++ ) {
@@ -247,12 +247,12 @@ Matrix* matrix_transpose( Matrix* m ) {
     while( aux->below != m ) {
         aux = aux->below;
     }
-    int line = aux->line + 1;
+    int line = aux->line;
     aux = m->right;
     while( aux->right != m ) {
         aux = aux->right;
     }
-    int column = aux->column + 1;
+    int column = aux->column;
 
     float** res = ( float** ) malloc ( line * sizeof( float* ) );
     for( int i = 0; i < line; i++ ) {
