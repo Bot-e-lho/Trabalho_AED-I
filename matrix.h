@@ -20,6 +20,7 @@ void matrix_print( Matrix* m );
 Matrix* matrix_create_with_values( int m, int n, float** values );
 Matrix* matrix_add( Matrix* m, Matrix* n );
 Matrix* matrix_multiply( Matrix* m, Matrix* n );
+Matrix* matrix_normal_multiply( Matrix* m, Matrix* n );
 Matrix* matrix_transpose( Matrix* m );
 float matrix_getelem( Matrix* m, int x, int y );
 void matrix_setelem( Matrix* m, int x, int y, float elem );
@@ -184,7 +185,8 @@ Matrix* matrix_create_with_values( int m, int n, float** values ) {
 }
 
 Matrix* matrix_add( Matrix* m, Matrix* n ) {
-    if( m == NULL || n == NULL || m->line != n->line || m->column != n->column ) {
+    if ( m == NULL || n == NULL || m->line != n->line || m->column != n->column ) {
+        printf( "Quantidade de colunas e linhas incompativel.\n" );
         return NULL;
     }
     
@@ -200,10 +202,10 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
     int column = aux->column;
 
     float** res = ( float** ) malloc ( row * sizeof ( float* ) );
-    for( int i = 0; i < row; i++ ) {
+    for( int i = 1; i < row; i++ ) {
         res[i] = ( float* ) malloc ( column * sizeof ( float ) );
-        for( int j = 0; j < column; j++ ) {
-            res[i][j] = matrix_getelem( m, i + 1, j + 1 ) + matrix_getelem( n, i + 1, j + 1 );
+        for( int j = 1; j < column; j++ ) {
+            res[i][j] = matrix_getelem( m, i, j ) + matrix_getelem( n, i, j );
         }
     }
 
@@ -218,6 +220,7 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
 
 Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
     if( m == NULL || n == NULL || m->column != n->line ) {
+        printf( "Quantidade de colunas e linhas incompativel.\n" );
         return NULL;
     }
 
@@ -244,7 +247,7 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
         for( int j = 0; j < n_column; j++ ) {
             float value = 0.00;
             for (int k = 0; k < m_column; k++) {
-                value += matrix_getelem( m, i + 1, k + 1 ) * matrix_getelem( n, k + 1, j + 1 );
+                value += matrix_getelem( m, i, k ) * matrix_getelem( n, k, j );
             }
             res[i][j] = value;
         }
@@ -260,8 +263,40 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
     return matrix;
 }
 
+Matrix* matrix_normal_multiply( Matrix* m, Matrix* n ) {
+    if( m == NULL || n == NULL || m->column != n->line ) {
+        printf( "Quantidade de colunas e linhas incompativel.\n" );
+        return NULL;
+    }
+
+    int row_m = m->line;
+    int col_m = m->column;
+    int col_n = n->column;
+
+    float** res = ( float** ) malloc ( row_m * sizeof ( float* ) );
+
+    for( int i = 0; i < row_m; i++ ) {
+        res[i] = ( float* )malloc( col_n * sizeof ( float ) );
+        for( int j = 0; j < col_n; j++ ) {
+            float value = 0.00;
+            for (int k = 0; k < col_m; k++) {
+                value += matrix_getelem( m, i, k ) * matrix_getelem( n, k, j );
+            }
+            res[i][j] = value;
+        }
+    }
+    Matrix* result = matrix_create_with_values(row_m, col_n, res);
+    for (int i = 0; i < row_m; i++) {
+        free(res[i]);
+    }
+    free(res);
+
+    return result;
+}
+
 Matrix* matrix_transpose( Matrix* m ) {
     if( m == NULL ) {
+        printf( "\nEsta vazia\n" );
         return NULL;
     }
     Matrix* aux = m->below;
@@ -279,7 +314,7 @@ Matrix* matrix_transpose( Matrix* m ) {
     for( int i = 0; i < row; i++ ) {
         res[i] = ( float* ) malloc ( column * sizeof ( float ) );
         for( int j = 0; j < column; j++ ) {
-            res[i][j] = matrix_getelem( m, j + 1, i + 1 );
+            res[i][j] = matrix_getelem( m, j, i );
         }
     }
 
