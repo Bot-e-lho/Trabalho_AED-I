@@ -141,9 +141,9 @@ void matrix_print( Matrix* m ) {
         printf( "\nEsta vazia\n" );
         return;
     }
-    Matrix* test = m->right;
-    while( test->right != m ) {
-        test = test->right;
+    Matrix* fill = m->right;
+    while( fill->right != m ) {
+        fill = fill->right;
     }
     printf( "\n" );
 
