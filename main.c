@@ -1,7 +1,4 @@
 #include "matrix.h"
-#include <stdio.h>
-#include <stdlib.h>
-
 int main( void ) {
 /* Inicializacao da aplicacao ... */
 Matrix *A = matrix_create();
@@ -21,3 +18,24 @@ matrix_destroy( A );
 matrix_destroy( B );
 return 0;
 }
+
+// ------------ Teste 2 -----------------
+// ------------  Main -------------------
+/*
+int main( void ) {
+    unsigned int size = 1850;
+    Matrix* matrix = matrix_create( size );
+    Matrix* matrix_transposed = matrix_transpose( matrix );
+
+    printf( "Matriz:\n" );
+    matrix_print( matrix );
+
+    printf( "\nTransposicao:\n" );
+    matrix_print( matrix_transposed );
+    matrix_destroy( matrix );
+    matrix_destroy( matrix_transposed );
+
+    return 0;
+}
+
+*/
