@@ -5,11 +5,11 @@
 ### INFO:
 
 ###### Componente - 1 : Marcos Lima Alves
-###### Matricula: 
+###### Matricula: 21200592
 ###### Turma: M2
-##### Contato:
-###### Email: 
-###### DC: 
+##### Contato: 
+###### Email: mlalves@inf.ufpel.edu.br
+###### DC: poty8313
 
 ###### Componente - 2 : Miguel Rodrigues Botelho
 ###### Matricula: 21202191
