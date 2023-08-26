@@ -21,4 +21,4 @@
 
 ##### Link para o vídeo:
 ###### <>
-###### Obs.:
+###### Obs.: Função da multiplicação entre matrizes normais foi comentada por erros presentes nela. E, ademais, a lógica para interromper o programa quando inserido valores que, para uma determinada operação, deviam condizer demonstra-se errada.
