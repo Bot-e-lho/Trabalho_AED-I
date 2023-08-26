@@ -180,7 +180,6 @@ Matrix* matrix_create_with_values( int m, int n, float** values ) {
             matrix_setelem( matrix, i + 1, j + 1, valor );
         }
     }
-
     return matrix;
 }
 
@@ -194,6 +193,7 @@ Matrix* matrix_add( Matrix* m, Matrix* n ) {
         aux = aux->below;
     }
     int row = aux->line;
+
     aux = m->right;
     while( aux->right != m ) {
         aux = aux->right;
@@ -257,7 +257,6 @@ Matrix* matrix_multiply( Matrix* m, Matrix* n ) {
         free( res[i] );
     }
     free( res );
-
     return matrix;
 }
 
@@ -303,6 +302,7 @@ Matrix* matrix_transpose( Matrix* m ) {
         aux = aux->below;
     }
     int line = aux->line;
+    
     aux = m->right;
     while( aux->right != m ) {
         aux = aux->right;
